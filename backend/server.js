@@ -23,8 +23,9 @@ app.use(cors(corsOptions));
 // parses application/json content and creates JS-accessible variables under (req.body)
 app.use(express.json());
 
+
 //Routes
-app.use("/api/v1/users", userRoute);
+app.use("/api/v1/", userRoute);
 app.use("/api/v1/students", studentRoute);
 
 //Listening on port

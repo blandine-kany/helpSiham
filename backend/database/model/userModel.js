@@ -17,14 +17,8 @@ const userSchema = new Schema({
     type: String,
     minlength: 3,
     trim: true,
-    unique: true,
     lowercase: true,
     required: "Email adress is required",
-    /*validate: [validateEmail, "Please fill a valid email address"],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please fill a valid email address",
-    ],*/
   },
   password: {
     type: String,
@@ -34,13 +28,16 @@ const userSchema = new Schema({
   position: {
     type: String,
     trim: true,
+    default: "",
   },
   status: {
     type: String,
-    enum: ["admin", "user"],
+    enum: ["superAdmin", "admin", "user"],
+    default: "user",
   },
-  valid: {
+  validAccount: {
     type: Number,
+    default: 0,
   },
   created_at: {
     type: Date,
