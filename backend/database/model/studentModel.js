@@ -31,7 +31,7 @@ const studentSchema = new Schema({
     trim: true,
     required: "Password is required",
   },
-  course: {
+  major: {
     type: String,
     trim: true,
   },
@@ -39,7 +39,7 @@ const studentSchema = new Schema({
     type: String,
     enum: ["admin", "user"],
   },
-  student_id: {
+  studentId: {
     type: String,
     unique: true,
     trim: true,
@@ -55,7 +55,8 @@ const studentSchema = new Schema({
   },
 });
 
+// declares a model
 const Student = mongoose.model("Student", studentSchema);
 
-//export
+//exports the model
 module.exports = Student;

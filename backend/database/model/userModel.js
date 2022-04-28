@@ -2,41 +2,44 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  firstName: {
-    type: String,
-    minlength: 3,
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    minlength: 3,
-    trim: true,
-    required: "Please fill the 'lastname' field",
+  name: {
+    last: {
+      type: String,
+      trim: true,
+      minlength: 3,
+      required: [true, "Please fill the 'lastname' field"],
+    },
+    first: {
+      type: String,
+      trim: true,
+    },
   },
   email: {
     type: String,
     minlength: 3,
     trim: true,
+    unique: [true, "Email adress already exists in database!"],
     lowercase: true,
-    required: "Email adress is required",
+    required: [true, "Email adress is required"],
   },
   password: {
     type: String,
     trim: true,
-    required: "Password is required",
+    required: [true, "Password is required"],
   },
   position: {
     type: String,
     trim: true,
     default: "",
   },
-  status: {
+  role: {
     type: String,
     enum: ["superAdmin", "admin", "user"],
     default: "user",
   },
   validAccount: {
     type: Number,
+    enum: [0, 1],
     default: 0,
   },
   created_at: {
