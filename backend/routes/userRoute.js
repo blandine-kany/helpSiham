@@ -1,46 +1,35 @@
 const express = require("express");
 const router = express.Router();
 
-// Require controller module
-const userController = require("../controllers/userController");
+// Import functions
+const { loginRequired } = require("../utils/helperFunctions");
+const { updateInput } = require("../customMiddleware/validators/userValidator");
+const {
+  getAllUsers,
+  userRegister,
+  userLogin,
+  userLogout,
+  userProfile,
+  updateUser,
+  deleteUser,
+} = require("../controllers/userController");
 
-/* API REST v1/users - Routes */
+/* API REST users/v1 - Routes */
 
 // GET request to display all the users
-router.get("/", userController.loginRequired, userController.getAllUsers); //status verification
+router.get("/", loginRequired, getAllUsers);
 
-//POST request to register
-router.post("/register", userController.userRegister);
-
-//POST request to login
-router.post("/login", userController.userLogin);
-
-// GET request to logout
-router.post("/logout", userController.loginRequired, userController.userLogout);
+//PATCH request to update user's profile
+router.patch("/profile", loginRequired, updateInput, updateUser);
+router.patch("/:userId", loginRequired, updateInput, updateUser);
 
 //GET request to access user's profile
-router.get(
-  "/profile",
-  userController.loginRequired,
-  userController.userProfile
-);
-
-//PUT request to update user's profile
-router.patch(
-  "/profile",
-  userController.loginRequired,
-  userController.updateUser
-);
-
-/*GET request to access user's profile
-router.get("/:userId", userController.userProfile);*/
+router.get("/profile", loginRequired, userProfile);
+router.get("/:userId", loginRequired, userProfile);
 
 //DELETE request to delete a user account
-router.delete(
-  "/profile",
-  userController.loginRequired,
-  userController.deleteUser
-);
+router.delete("/profile", loginRequired, deleteUser);
+router.delete("/:userId", loginRequired, deleteUser);
 
 // export to use in server.js
 module.exports = router;

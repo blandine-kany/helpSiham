@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const User = require("../database/model/userModel");
 
 /**
  * Function that hashes a given string using the bcrypt library
@@ -39,15 +39,23 @@ async function comparePassword(password, hash) {
   return false;
 }
 
-/**
- * Generates a JWT using arguments
- * @param {*} user_id
- * @returns
- */
-function jwtGenerator(payload) {
-  return jwt.sign(payload, process.env.SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+async function loginRequired(req, res, next) {
+  if (!req.session || !req.session.userId) {
+    console.log("User session not found");
+    return res.status(403).json({ msg: "Authentication necessary" });
+  }
+
+  let user = await User.findById(req.session.userId);
+  if (!user) {
+    console.log("User ID not found");
+    return res.status(404).json({ msg: "User not found" });
+  }
+
+  if (user.validAccount == 0) {
+    console.log("User not authorized yet");
+    return res.status(401).json({ msg: "User not authorized yet." });
+  }
+  next();
 }
 
-module.exports = { hashPassword, comparePassword, jwtGenerator };
+module.exports = { hashPassword, comparePassword, loginRequired };

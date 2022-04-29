@@ -16,6 +16,7 @@ const port = process.env.SERVER_PORT || 5000;
 
 // Import the routes
 const userRoute = require("./routes/userRoute");
+const authRoute = require("./routes/authRoute");
 const studentRoute = require("./routes/studentRoute");
 
 // CORS Middleware
@@ -50,8 +51,10 @@ app.use(
 );
 
 // Routes
-app.use("/api/users/v1/", userRoute);
-app.use("/api/students/v1/", studentRoute);
+app.use("/api/v1/auth/", authRoute);
+app.use("/api/v1/users/", userRoute);
+app.use("/api/v1/students/", studentRoute);
+
 
 // Listening on port
 app.listen(port, (error) => {
