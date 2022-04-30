@@ -4,15 +4,18 @@
  */
 
 // Import dependencies
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/config/.env" });
 require("./database/db_connection");
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const session = require("express-session");
+const logger = require("./config/logger");
+const path = require("path");
 
 // Variables
+const app = express();
 const port = process.env.SERVER_PORT || 5000;
+const filePath = path.relative(__dirname + "/..", __filename);
 
 // Import the routes
 const userRoute = require("./routes/userRoute");
@@ -55,13 +58,18 @@ app.use("/api/v1/auth/", authRoute);
 app.use("/api/v1/users/", userRoute);
 app.use("/api/v1/students/", studentRoute);
 
-
 // Listening on port
 app.listen(port, (error) => {
   if (error) {
-    console.error(error);
-    throw error;
+    logger.error({
+      message: "Failed to start the server!",
+      filePath,
+      error,
+    });
   } else {
-    console.log(`Server is running on port ${port}`);
+    logger.info({
+      message: `Server is running on port ${port}`,
+      filePath,
+    });
   }
 });

@@ -7,7 +7,7 @@ const getAllUsers = async (req, res) => {
     if (isRoleValid) {
       const users = await User.find();
       if (!users) {
-        console.error(error);
+        console.error("There was an error");
         return res.status(400).json({ msg: "There was an error" });
       }
       return res
@@ -46,7 +46,7 @@ const userRegister = async (req, res) => {
 
     if (!newUser) {
       console.error(error);
-      return res.status(400).json({ msg: "There was an error." });
+      return res.status(422).json({ msg: "There was an error." });
     }
 
     console.log("New user request sent.");

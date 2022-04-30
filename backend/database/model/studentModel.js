@@ -2,52 +2,45 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
-  firstName: {
-    type: String,
-    minlength: 3,
-    trim: true,
-  },
-  lastName: {
-    type: String,
-    minlength: 3,
-    trim: true,
-    required: "Lastname is required",
+  name: {
+    last: {
+      type: String,
+      trim: true,
+      minlength: 3,
+      required: [true, "Please fill the 'lastname' field"],
+    },
+    first: {
+      type: String,
+      trim: true,
+    },
   },
   email: {
     type: String,
     minlength: 3,
     trim: true,
-    unique: true,
+    unique: [true, "Email adress already exists in database!"],
     lowercase: true,
-    required: "Email adress is required",
-    /*validate: [validateEmail, "Please fill a valid email address"],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please fill a valid email address",
-    ],*/
-  },
-  password: {
-    type: String,
-    trim: true,
-    required: "Password is required",
+    required: [true, "Email adress required"],
   },
   major: {
     type: String,
     trim: true,
+    required: [true, "Major required"],
   },
-  status: {
+  role: {
     type: String,
-    enum: ["admin", "user"],
+    enum: ["representative", "normal"],
+    default: "normal",
   },
   studentId: {
     type: String,
-    unique: true,
+    unique: [true, "Student ID already exists in database!"],
     trim: true,
     required: "Student ID required",
   },
   dateOfBirthday: {
     type: Date,
-    required: "Date of birth is required",
+    required: [true, "Date of birth required"],
   },
   dateOfInscription: {
     type: Date,
