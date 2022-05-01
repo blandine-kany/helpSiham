@@ -1,16 +1,31 @@
 require("winston-daily-rotate-file");
 const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, printf } = format;
+const { combine, timestamp, printf, errors } = format;
 
 // Custom format for logging
 const myFormat = printf(
   ({ level, message, filePath, timestamp, data, error }) => {
-    let logMessage = `${timestamp} [${level.toUpperCase()}] ${filePath}: ${message}`;
-    if (data) {
-      logMessage = logMessage + `\n${data}`;
+    let logMessage = `${timestamp} [${level.toUpperCase()}] ${filePath}:`;
+
+    if (message.trim()) {
+      logMessage = logMessage + ` ${message}`;
     }
+
+    if (data) {
+      logMessage =
+        logMessage + `\n------[DATA]------\n${data}\n------------------`;
+    }
+
+    // Display errors
     if (error) {
-      logMessage = logMessage + `\n------------\n${error}\n------------\n`;
+      if (error.stack) {
+        logMessage =
+          logMessage +
+          `\n------[ERROR]------\n${error.stack}\n-------------------`;
+      } else {
+        logMessage =
+          logMessage + `\n------[ERROR]------\n${error}\n-------------------`;
+      }
     }
     return logMessage;
   }
@@ -29,6 +44,7 @@ const rotateFileTransport = (filename, level) =>
 
 const logger = createLogger({
   format: combine(
+    errors({ stack: true }),
     timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
     }),

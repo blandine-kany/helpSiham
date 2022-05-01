@@ -38,7 +38,7 @@ const studentSchema = new Schema({
     trim: true,
     required: "Student ID required",
   },
-  dateOfBirthday: {
+  dateOfBirth: {
     type: Date,
     required: [true, "Date of birth required"],
   },
