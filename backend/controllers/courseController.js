@@ -1,73 +1,63 @@
-const Student = require("../database/model/studentModel");
+const Course = require("../database/model/courseModel");
 const logger = require("../config/logger");
 const path = require("path");
 const filePath = path.relative(__dirname + "/..", __filename);
 
-exports.getAllStudents = async (req, res) => {
-  Student.find((error, students) => {
+exports.getAllCourses = async (req, res) => {
+  Course.find((error, courses) => {
     if (error) {
       logger.error({ message: "There was an error", filePath, error });
       return res.status(500).json({ msg: "There was an error" });
     }
-    if (!students) {
+    if (!courses) {
       logger.warn({ message: "There was an error", filePath, error });
       return res.status(400).json({ msg: "There was an error" });
     }
 
     logger.info({
-      message: "List of students succesfully retreived.",
+      message: "List of courses succesfully retreived.",
       filePath,
     });
 
     // Check if results is empty
-    if (students.length == 0) {
+    if (courses.length == 0) {
       return res
         .status(204)
-        .json({ msg: "Succesfully retreived all data", students });
+        .json({ msg: "Succesfully retreived all data", courses });
     }
     return res
       .status(200)
-      .json({ msg: "Succesfully retreived all Student data", students });
+      .json({ msg: "Succesfully retreived all courses", courses });
   });
 };
 
-exports.createStudent = async (req, res) => {
+exports.createCourse = async (req, res) => {
   try {
-    const { email, studentId } = req.body;
-    const studentEmail = await Student.findOne({ email });
+    const { courseId } = req.body;
 
-    // check if student already exists
-    if (studentEmail) {
+    const courseID = await Course.findOne({ courseId });
+    if (courseID) {
       logger.info({
-        message: "Invalid input - Student email already exists",
+        message: "Invalid input - Course ID already exists",
         filePath,
       });
-      return res.status(409).json({ msg: "Student email already exists." });
+      return res.status(409).json({ msg: "Course ID already exists." });
     }
 
-    const studentID = await Student.findOne({ studentId });
-    if (studentID) {
-      logger.info({
-        message: "Invalid input - Student ID already exists",
-        filePath,
-      });
-      return res.status(409).json({ msg: "Student ID already exists." });
-    }
-
-    const newStudent = await Student.create(req.body);
-    if (!newStudent) {
+    const newCourse = await Course.create(req.body);
+    if (!newCourse) {
       logger.warn({
         message: "Something went wrong",
         filePath,
-        data: newStudent,
+        data: newCourse,
       });
       return res.status(422).json({ msg: "Something went wrong" });
     }
 
-    logger.info({ message: "New Student created", data: newStudent, filePath });
+    logger.info({ message: "New Course created", data: newCourse, filePath });
     return res
       .status(201)
-      .json({ msg: "New student was created succesfully." });
+      .json({ msg: "New course was created successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "There was an error." });
@@ -77,7 +67,7 @@ exports.createStudent = async (req, res) => {
 exports.deleteStudent = async (req, res) => {
   try {
     const { studentId } = req.params;
-    const student = await Student.findByIdAndDelete(studentId);
+    const student = await Course.findByIdAndDelete(studentId);
     if (!student) {
       logger.warn({
         message: `Student ${studentId} not found`,
@@ -101,7 +91,7 @@ exports.deleteStudent = async (req, res) => {
 exports.getStudent = async (req, res) => {
   try {
     const { studentId } = req.params;
-    const studentInfo = await Student.findById(studentId);
+    const studentInfo = await Course.findById(studentId);
 
     if (!studentInfo) {
       logger.warn({
@@ -128,7 +118,7 @@ exports.updateStudent = async (req, res) => {
   try {
     const idToUpdate = req.params.studentId;
     const { email, studentId } = req.body;
-    const studentEmail = await Student.findOne({ email });
+    const studentEmail = await Course.findOne({ email });
 
     // check if student email already exists
     if (studentEmail && studentEmail._id.toString() != idToUpdate) {
@@ -140,7 +130,7 @@ exports.updateStudent = async (req, res) => {
     }
 
     // check if student ID already exists
-    const studentID = await Student.findOne({ studentId });
+    const studentID = await Course.findOne({ studentId });
     if (studentID && studentID._id.toString() != idToUpdate) {
       logger.info({
         message: "Invalid input - Student ID already exists",
@@ -149,7 +139,7 @@ exports.updateStudent = async (req, res) => {
       return res.status(409).json({ msg: "Student ID already exists." });
     }
 
-    const studentUpdated = await Student.findByIdAndUpdate(
+    const studentUpdated = await Course.findByIdAndUpdate(
       idToUpdate,
       {
         $set: req.body,
@@ -209,7 +199,7 @@ exports.filterStudents = async (req, res) => {
       }
     }
 
-    const filteredStudents = await Student.find(filterQuery);
+    const filteredStudents = await Course.find(filterQuery);
     if (!filteredStudents) {
       logger.warn({
         message: "Something went wrong",

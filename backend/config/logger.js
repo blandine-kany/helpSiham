@@ -21,10 +21,11 @@ const myFormat = printf(
       if (error.stack) {
         logMessage =
           logMessage +
-          `\n------[ERROR]------\n${error.stack}\n-------------------`;
+          `\n------[ERROR / WARN DETAILS]------\n${error.stack}\n----------------------------------`;
       } else {
         logMessage =
-          logMessage + `\n------[ERROR]------\n${error}\n-------------------`;
+          logMessage +
+          `\n------[ERROR / WARN DETAILS]------\n${error}\n----------------------------------`;
       }
     }
     return logMessage;

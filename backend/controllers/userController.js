@@ -189,7 +189,7 @@ const deleteUser = async (req, res) => {
         });
       }
       return res
-        .status(200)
+        .status(204)
         .json({ msg: "The account has been deleted successfully." });
     }
   });
