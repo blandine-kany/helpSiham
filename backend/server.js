@@ -56,13 +56,13 @@ app.use("/api/v1/courses/", courseRoute);
 app.listen(port, (error) => {
   if (error) {
     logger.error({
-      message: "Failed to start the server!",
+      message: "Failed to start the server! 😭😭",
       filePath,
       error,
     });
   } else {
     logger.info({
-      message: `Server is running on port ${port}`,
+      message: `Server is running on port ${port} 😎😎`,
       filePath,
     });
   }
