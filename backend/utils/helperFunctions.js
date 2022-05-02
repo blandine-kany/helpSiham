@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
 const User = require("../database/model/userModel");
+const logger = require("../config/logger");
+const path = require("path");
+const filePath = path.relative(__dirname + "/..", __filename);
 
 /**
  * Function that hashes a given string using the bcrypt library
@@ -15,7 +18,10 @@ async function hashPassword(password, saltRounds = 10) {
     // Hash password
     return await bcrypt.hash(password, salt);
   } catch (error) {
-    console.error(error);
+    logger.warn({
+      message: `There was an error`,
+      filePath,
+    });
     throw error;
   }
 }
@@ -32,7 +38,10 @@ async function comparePassword(password, hash) {
     // Compare password
     return await bcrypt.compare(password, hash);
   } catch (error) {
-    console.log(error);
+    logger.warn({
+      message: `There was an error`,
+      filePath,
+    });
   }
 
   // Return false if error
@@ -41,18 +50,27 @@ async function comparePassword(password, hash) {
 
 async function loginRequired(req, res, next) {
   if (!req.session || !req.session.userId) {
-    console.log("User session not found");
+    logger.warn({
+      message: `User session not found`,
+      filePath,
+    });
     return res.status(403).json({ msg: "Authentication necessary" });
   }
 
-  let user = await User.findById(req.session.userId);
+  const user = await User.findById(req.session.userId);
   if (!user) {
-    console.log("User ID not found");
+    logger.warn({
+      message: `User not found`,
+      filePath,
+    });
     return res.status(404).json({ msg: "User not found" });
   }
 
   if (user.validAccount == 0) {
-    console.log("User not authorized yet");
+    logger.info({
+      message: `User not authorized yet`,
+      filePath,
+    });
     return res.status(401).json({ msg: "User not authorized yet." });
   }
   next();

@@ -10,7 +10,10 @@ const getAllUsers = async (req, res) => {
     if (isRoleValid) {
       const users = await User.find();
       if (!users) {
-        console.error("There was an error");
+        logger.warn({
+          message: `There was an error`,
+          filePath,
+        });
         return res.status(400).json({ msg: "There was an error" });
       }
 
