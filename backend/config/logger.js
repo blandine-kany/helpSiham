@@ -21,11 +21,13 @@ const myFormat = printf(
       if (error.stack) {
         logMessage =
           logMessage +
-          `\n------[ERROR / WARN DETAILS]------\n${error.stack}\n----------------------------------`;
+          `\n------[${level.toUpperCase()} DETAILS]------\n${
+            error.stack
+          }\n--------------------------`;
       } else {
         logMessage =
           logMessage +
-          `\n------[ERROR / WARN DETAILS]------\n${error}\n----------------------------------`;
+          `\n------[${level.toUpperCase()} DETAILS]------\n${error}\n--------------------------`;
       }
     }
     return logMessage;

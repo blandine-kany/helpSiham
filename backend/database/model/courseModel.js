@@ -8,7 +8,7 @@ const courseModel = new Schema({
     required: "A title is required",
   },
   courseId: {
-    type: Number,
+    type: String,
     required: true,
     trim: true,
   },

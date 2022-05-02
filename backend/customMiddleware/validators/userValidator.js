@@ -1,6 +1,10 @@
 /* Validation & Sanitisation of user input */
 
 const { body, validationResult } = require("express-validator");
+const logger = require("../../config/logger");
+const path = require("path");
+const filePath = path.relative(__dirname + "/..", __filename);
+
 
 // Validation chain that checks basic user input
 const checkGenericInput = [
@@ -52,9 +56,14 @@ exports.registrationInput = [
 
     // if an error is detected notify user
     if (!errors.isEmpty()) {
-      return res.status(422).json(extractedErrors);
+      logger.warn({
+        message: "Invalid User input",
+        error: errorMessages,
+        filePath,
+      });
+      return res.status(422).json(errorMessages);
     } else {
-      console.log("No errors found");
+      logger.info({ message: "No input errors found", filePath });
     }
     next();
   },
@@ -70,12 +79,16 @@ exports.loginInput = [
     const errors = validationResult(req);
     const extractedErrors = [];
     errors.array().map((err) => extractedErrors.push(err.msg));
+    
     if (!errors.isEmpty()) {
-      console.log(errors.array());
-      // return res.status(422).json("Incorrect form submission - check again!!");
-      return res.status(422).json(extractedErrors);
+      logger.warn({
+        message: "Invalid Student input",
+        error: errorMessages,
+        filePath,
+      });
+      return res.status(422).json(errorMessages);
     } else {
-      console.log("No errors found");
+      logger.info({ message: "No input errors found", filePath });
     }
     next();
   },
@@ -95,9 +108,14 @@ exports.updateInput = [
       .map((err) => extractedErrors.push(err.msg));
 
     if (!errors.isEmpty()) {
-      return res.status(422).json(extractedErrors);
+      logger.warn({
+        message: "Invalid Student input",
+        error: errorMessages,
+        filePath,
+      });
+      return res.status(422).json(errorMessages);
     } else {
-      console.log("No input errors found");
+      logger.info({ message: "No input errors found", filePath });
     }
     next();
   },

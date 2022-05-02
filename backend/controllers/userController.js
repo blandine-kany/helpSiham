@@ -1,5 +1,8 @@
 const User = require("../database/model/userModel");
 const { hashPassword, comparePassword } = require("../utils/helperFunctions");
+const logger = require("../config/logger");
+const path = require("path");
+const filePath = path.relative(__dirname + "/..", __filename);
 
 const getAllUsers = async (req, res) => {
   try {
@@ -10,15 +13,25 @@ const getAllUsers = async (req, res) => {
         console.error("There was an error");
         return res.status(400).json({ msg: "There was an error" });
       }
+
+      logger.info({
+        message: "List of users successfully retrieved.",
+        filePath,
+      });
+
       return res
         .status(200)
-        .json({ msg: "Succesfully retreived all the users", users });
+        .json({ msg: "Successfully retrieved all the users", users });
     } else {
+      logger.warn({
+        message: `User ${req.session.userId} not authorized`,
+        filePath,
+      });
       return res.status(403).json({ msg: "You are not authorized." });
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ msg: "There was an error" });
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
@@ -29,7 +42,10 @@ const userRegister = async (req, res) => {
 
     // check if user already exist
     if (userExists) {
-      console.log("Invalid input - User email already exists");
+      logger.info({
+        message: "Invalid input - User email already exists",
+        filePath,
+      });
       return res.status(409).json({ msg: "User email already exists." });
     }
 
@@ -45,25 +61,35 @@ const userRegister = async (req, res) => {
     });
 
     if (!newUser) {
-      console.error(error);
+      logger.warn({
+        message: "Something went wrong - Request not processed",
+        filePath,
+        error: newUser,
+      });
       return res.status(422).json({ msg: "There was an error." });
     }
 
-    console.log("New user request sent.");
-    return res.status(201).json({ msg: "Your request was sent succesfully." });
+    logger.info({
+      message: "New user request sent.",
+      data: newUser,
+      filePath,
+    });
+    return res.status(201).json({ msg: "Your request was sent successfully." });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ msg: "There was an error." });
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
 const userLogout = async (req, res) => {
   req.session.destroy((error) => {
     if (error) {
-      console.error(error);
-      return res.status(400).json("There was an error - Failure to logout.");
+      logger.error({ message: " ", filePath, error });
+      return res
+        .status(400)
+        .json({ msg: "There was an error - Failure to logout." });
     }
-    console.log("User successfully logged out");
+    logger.info({ message: "User successfully logged out", filePath });
     res.status(200).json({ msg: "You have been logged out." });
   });
 };
@@ -74,7 +100,10 @@ const userLogin = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("Invalid input - User email does not exist");
+      logger.info({
+        message: "Invalid input - User email does not exist",
+        filePath,
+      });
       return res.status(404).json({ msg: "User not found." });
     }
 
@@ -83,22 +112,33 @@ const userLogin = async (req, res) => {
 
     if (user && isPasswordValid) {
       if (user.validAccount == 0) {
-        console.log("User not authorized yet");
+        logger.info({
+          message: "User not authorized yet",
+          filePath,
+        });
         return res.status(401).json({ msg: "User not authorized yet." });
       }
-      console.log("User successfully connected");
+
       req.session.userId = user._id;
+      logger.info({
+        message: `User ${user._id} successfully connected`,
+        filePath,
+      });
       return res.status(200).json({ name: user.name, email });
     }
 
+    logger.info({
+      message: "Invalid Credentials",
+      filePath,
+    });
     return res.status(401).json({ msg: "Invalid Credentials" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ msg: "There was an error" });
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-const userProfile = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     let userId = req.session.userId;
     let query;
@@ -121,7 +161,10 @@ const userProfile = async (req, res) => {
           }))(query);
         }
       } else {
-        console.log("User not authorized to access this information.");
+        logger.info({
+          message: "User not authorized to access this information.",
+          filePath,
+        });
         return res
           .status(401)
           .json({ msg: "User not authorized to access this information." });
@@ -140,16 +183,22 @@ const userProfile = async (req, res) => {
     }
 
     if (!userInfo) {
-      console.error(`User ${userId} not found`);
+      logger.warn({
+        message: `User ${userId} not found`,
+        filePath,
+      });
       return res.status(404).json({ msg: "User not found" });
     }
-    console.log(`User ${userId} information sent`);
+    logger.info({
+      message: `User ${userId} information retrieved successfully`,
+      filePath,
+    });
     return res
       .status(200)
-      .json({ msg: "User information succesfully retreived", userInfo });
+      .json({ msg: "User information  retrieved", userInfo });
   } catch (error) {
-    console.error(error);
-    return res.status(400).json({ msg: "There was an error." });
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
@@ -163,31 +212,42 @@ const deleteUser = async (req, res) => {
     if (user && user.role === "superAdmin") {
       idTodelete = req.params.userId;
     } else {
-      console.log("User not authorized to delete this information.");
+      logger.info({
+        message: `User ${req.params.userId} not authorized to delete this information.`,
+        filePath,
+      });
       return res.status(401).json({ msg: "User not authorized." });
     }
   }
 
   User.findByIdAndDelete(idTodelete, (error, userToDelete) => {
     if (error) {
-      console.error(error);
-      res.status(500).json("There was an error.");
+      logger.error({ message: " ", filePath, error });
+      return res
+        .status(500)
+        .json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
     }
     if (!userToDelete) {
-      console.log(`User ${idTodelete} not found.`);
-      res.status(404).json({ msg: "User not found." });
+      logger.warn({
+        message: `User ${idTodelete} not found.`,
+        filePath,
+      });
+      return res.status(404).json({ msg: "User not found." });
     } else {
-      console.log(`User ${idTodelete} - account deleted succesfully.`);
       if (!differentUser) {
         req.session.destroy((error) => {
           if (error) {
-            console.error(error);
-            return res.json(
-              "There was an error - Failure to delete the account."
-            );
+            logger.error({ message: " ", filePath, error });
+            return res.status(500).json({
+              msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭\nFailure to logout the account.",
+            });
           }
         });
       }
+      logger.info({
+        message: `User ${idTodelete} - account deleted successfully.`,
+        filePath,
+      });
       return res
         .status(204)
         .json({ msg: "The account has been deleted successfully." });
@@ -208,7 +268,10 @@ const updateUser = async (req, res) => {
         delete bodyToUpdate.email;
         delete bodyToUpdate.password;
       } else {
-        console.log("User not authorized to modify this information.");
+        logger.info({
+          message: `User ${req.params.userId} not authorized to modify this information.`,
+          filePath,
+        });
         return res.status(401).json({ msg: "User not authorized." });
       }
     } else {
@@ -224,7 +287,10 @@ const updateUser = async (req, res) => {
     // check if user already exist
     const userExists = await User.findOne({ email: bodyToUpdate.email });
     if (userExists && userExists._id != idToUpdate) {
-      console.log("Invalid input - User email already exists");
+      logger.info({
+        message: "Invalid input - User email already exists",
+        filePath,
+      });
       return res.status(409).json({ msg: "User email already exists." });
     }
 
@@ -237,19 +303,24 @@ const updateUser = async (req, res) => {
     );
 
     if (!userUpdated) {
-      console.error(`User ${idToUpdate} was not updated`);
+      logger.warn({
+        message: `User ${idToUpdate} was not updated`,
+        filePath,
+      });
       return res.status(400).json({
-        msg: "There was an error while communicating with the database ",
+        msg: "User not found ",
       });
     }
-    console.log(`User ${idToUpdate} information updated`);
-
+    logger.info({
+      message: `User ${idToUpdate} information updated`,
+      filePath,
+    });
     return res
       .status(200)
-      .json({ msg: "User information succesfully updated", userUpdated });
+      .json({ msg: "User information successfully updated", userUpdated });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json("There was an error.");
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
@@ -267,7 +338,7 @@ module.exports = {
   userLogout,
   userLogin,
   userRegister,
-  userProfile,
+  getUser,
   updateUser,
   deleteUser,
 };

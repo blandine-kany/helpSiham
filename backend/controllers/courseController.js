@@ -6,8 +6,10 @@ const filePath = path.relative(__dirname + "/..", __filename);
 exports.getAllCourses = async (req, res) => {
   Course.find((error, courses) => {
     if (error) {
-      logger.error({ message: "There was an error", filePath, error });
-      return res.status(500).json({ msg: "There was an error" });
+      logger.error({ message: " ", filePath, error });
+      return res
+        .status(500)
+        .json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
     }
     if (!courses) {
       logger.warn({ message: "There was an error", filePath, error });
@@ -15,19 +17,19 @@ exports.getAllCourses = async (req, res) => {
     }
 
     logger.info({
-      message: "List of courses succesfully retreived.",
+      message: "List of courses successfully retrieved.",
       filePath,
     });
 
-    // Check if results is empty
+    // Check if result is empty
     if (courses.length == 0) {
       return res
         .status(204)
-        .json({ msg: "Succesfully retreived all data", courses });
+        .json({ msg: "successfully retrieved all data", courses });
     }
     return res
       .status(200)
-      .json({ msg: "Succesfully retreived all courses", courses });
+      .json({ msg: "successfully retrieved all courses", courses });
   });
 };
 
@@ -35,6 +37,7 @@ exports.createCourse = async (req, res) => {
   try {
     const { courseId } = req.body;
 
+    // check if course ID already exists
     const courseID = await Course.findOne({ courseId });
     if (courseID) {
       logger.info({
@@ -47,9 +50,9 @@ exports.createCourse = async (req, res) => {
     const newCourse = await Course.create(req.body);
     if (!newCourse) {
       logger.warn({
-        message: "Something went wrong",
+        message: "Something went wrong - Request not processed",
         filePath,
-        data: newCourse,
+        error: newCourse,
       });
       return res.status(422).json({ msg: "Something went wrong" });
     }
@@ -60,86 +63,77 @@ exports.createCourse = async (req, res) => {
       .json({ msg: "New course was created successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
-    return res.status(500).json({ msg: "There was an error." });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-exports.deleteStudent = async (req, res) => {
+exports.deleteCourse = async (req, res) => {
   try {
-    const { studentId } = req.params;
-    const student = await Course.findByIdAndDelete(studentId);
-    if (!student) {
+    const { courseId } = req.params;
+
+    const course = await Course.findByIdAndDelete(courseId);
+    if (!course) {
       logger.warn({
-        message: `Student ${studentId} not found`,
+        message: `Course ${courseId} not found`,
         filePath,
-        data: student,
+        error: course,
       });
-      return res.status(404).json({ msg: `Student ${studentId} not found 😕` });
+      return res.status(404).json({ msg: `Course ${courseId} not found 😕` });
     }
 
     logger.info({
-      message: `Student ${studentId} deleted`,
+      message: `Course ${courseId} deleted`,
       filePath,
     });
-    return res.status(204).json({ msg: "Student was deleted succesfully." });
+    return res.status(200).json({ msg: "Course was deleted successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-exports.getStudent = async (req, res) => {
+exports.getCourse = async (req, res) => {
   try {
-    const { studentId } = req.params;
-    const studentInfo = await Course.findById(studentId);
+    const { courseId } = req.params;
+    const courseInfo = await Course.findById(courseId);
 
-    if (!studentInfo) {
+    if (!courseInfo) {
       logger.warn({
         message: "Something went wrong",
         filePath,
-        data: studentInfo,
+        error: courseInfo,
       });
-      return res.status(404).json({ msg: "Student not found" });
+      return res.status(404).json({ msg: "Course not found" });
     }
     logger.info({
-      message: `Student ${studentId} info retreived succesfully`,
+      message: `Course ${courseId} info retrieved successfully`,
       filePath,
     });
     return res
       .status(200)
-      .json({ msg: "Student info was retreived succesfully.", studentInfo });
+      .json({ msg: "Course info was retrieved successfully.", courseInfo });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-exports.updateStudent = async (req, res) => {
+exports.updateCourse = async (req, res) => {
   try {
-    const idToUpdate = req.params.studentId;
-    const { email, studentId } = req.body;
-    const studentEmail = await Course.findOne({ email });
+    const idToUpdate = req.params.courseId;
+    const { courseId } = req.body;
 
-    // check if student email already exists
-    if (studentEmail && studentEmail._id.toString() != idToUpdate) {
+    // check if course ID already exists
+    const courseID = await Course.findOne({ courseId });
+    if (courseID) {
       logger.info({
-        message: "Invalid input - Student email already exists",
+        message: "Invalid input - Course ID already exists",
         filePath,
       });
-      return res.status(409).json({ msg: "Student email already exists." });
+      return res.status(409).json({ msg: "Course ID already exists." });
     }
 
-    // check if student ID already exists
-    const studentID = await Course.findOne({ studentId });
-    if (studentID && studentID._id.toString() != idToUpdate) {
-      logger.info({
-        message: "Invalid input - Student ID already exists",
-        filePath,
-      });
-      return res.status(409).json({ msg: "Student ID already exists." });
-    }
-
-    const studentUpdated = await Course.findByIdAndUpdate(
+    const courseUpdated = await Course.findByIdAndUpdate(
       idToUpdate,
       {
         $set: req.body,
@@ -147,74 +141,68 @@ exports.updateStudent = async (req, res) => {
       { returnDocument: "after" }
     );
 
-    if (!studentUpdated) {
+    if (!courseUpdated) {
       logger.warn({
         message: "Something went wrong",
         filePath,
-        data: studentUpdated,
+        error: courseUpdated,
       });
-      return res.status(404).json({ msg: "Student not found" });
+      return res.status(404).json({ msg: "Course not found" });
     }
     logger.info({
-      message: `Student ${idToUpdate} info updated succesfully`,
+      message: `Course ${idToUpdate} info updated successfully`,
       filePath,
     });
     return res
       .status(200)
-      .json({ msg: "Student info was updated succesfully.", studentUpdated });
+      .json({ msg: "Course info was updated successfully.", courseUpdated });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-exports.filterStudents = async (req, res) => {
+exports.filterCourses = async (req, res) => {
   try {
     // Get filter criteria from body
     const filterKeys = Object.keys(req.body);
     const filterValues = Object.values(req.body);
     let filterQuery = {};
 
-    // Create query with filter
+    // Create query with filter criteria
     for (let i = 0; i < filterKeys.length; i++) {
-      if (filterValues[i].length > 0) {
-        // if filter criteria is dateOfBirth
-        if (filterKeys[i] === "dateOfBirth") {
-          // check if it is between 2 dates
-          if (filterValues[i].length == 2) {
-            filterQuery[filterKeys[i]] = {
-              $gte: new Date(filterValues[i][0]),
-              $lt: new Date(filterValues[i][1]),
-            };
-          } else {
-            filterQuery[filterKeys[i]] = new Date(filterValues[i]);
-          }
-        } else {
-          filterQuery[filterKeys[i]] = {
-            // regex to get everything that contains the given expression
-            $regex: `${filterValues[i]}`,
-            $options: "i",
-          };
-        }
-      }
+      filterQuery[filterKeys[i]] = {
+        // regex to get everything that contains the given expression
+        $regex: `${filterValues[i]}`,
+        $options: "i",
+      };
     }
 
-    const filteredStudents = await Course.find(filterQuery);
-    if (!filteredStudents) {
+    const filteredCourses = await Course.find(filterQuery);
+    if (!filteredCourses) {
       logger.warn({
         message: "Something went wrong",
         filePath,
-        data: filteredStudents,
+        error: filteredCourses,
       });
       return res.status(404).json({ msg: "Could not apply filter 😭" });
     }
+
     logger.info({
-      message: `Filtered students were retreived succesfully.`,
+      message: `Filtered courses were retrieved successfully.`,
       filePath,
     });
+
+    // Check if result is empty
+    if (filteredCourses.length == 0) {
+      return res
+        .status(204)
+        .json({ msg: "No results to show", st });
+    }
+
     return res.status(200).json({
-      msg: "Filtered students were retreived succesfully.",
-      filteredStudents,
+      msg: "Filtered courses were retrieved successfully.",
+      filteredCourses,
     });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
