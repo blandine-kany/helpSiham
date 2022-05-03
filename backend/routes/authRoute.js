@@ -16,10 +16,10 @@ const {
 
 /* API REST api/v1/auth - Routes */
 
-//POST request to register
+// POST request to register
 router.post("/register", registrationInput, userRegister);
 
-//POST request to login
+// POST request to login
 router.post("/login", loginInput, userLogin);
 
 // GET request to logout

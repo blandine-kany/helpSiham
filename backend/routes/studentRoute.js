@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+
+// Import functions
 const { loginRequired } = require("../utils/helperFunctions");
 const {
   studentInput,
@@ -13,7 +15,8 @@ const {
   updateStudent,
   filterStudents,
 } = require("../controllers/studentController");
-/* API REST v1/students - Routes */
+
+/* API REST api/v1/students/ - Routes */
 
 // GET request to display all the students
 router.get("/", loginRequired, getAllStudents);
