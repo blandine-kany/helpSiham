@@ -15,7 +15,7 @@ exports.getAllStudents = async (req, res) => {
     }
 
     logger.info({
-      message: "List of students succesfully retreived.",
+      message: "List of students successfully retrieved.",
       filePath,
     });
 
@@ -23,11 +23,11 @@ exports.getAllStudents = async (req, res) => {
     if (students.length == 0) {
       return res
         .status(204)
-        .json({ msg: "Succesfully retreived all data", students });
+        .json({ msg: "successfully retrieved all data", students });
     }
-    res
+    return res
       .status(200)
-      .json({ msg: "Succesfully retreived all Student data", students });
+      .json({ msg: "successfully retrieved all Student data", students });
   });
 };
 
@@ -67,7 +67,7 @@ exports.createStudent = async (req, res) => {
     logger.info({ message: "New Student created", data: newStudent, filePath });
     return res
       .status(201)
-      .json({ msg: "New student was created succesfully." });
+      .json({ msg: "New student was created successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "There was an error." });
@@ -91,14 +91,14 @@ exports.deleteStudent = async (req, res) => {
       message: `Student ${studentId} deleted`,
       filePath,
     });
-    return res.status(200).json({ msg: "Student was deleted succesfully." });
+    return res.status(204).json({ msg: "Student was deleted successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
 };
 
-exports.studentProfile = async (req, res) => {
+exports.getStudent = async (req, res) => {
   try {
     const { studentId } = req.params;
     const studentInfo = await Student.findById(studentId);
@@ -112,12 +112,12 @@ exports.studentProfile = async (req, res) => {
       return res.status(404).json({ msg: "Student not found" });
     }
     logger.info({
-      message: `Student ${studentId} info retreived succesfully`,
+      message: `Student ${studentId} info retrieved successfully`,
       filePath,
     });
     return res
       .status(200)
-      .json({ msg: "Student info was retreived succesfully.", studentInfo });
+      .json({ msg: "Student info was retrieved successfully.", studentInfo });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
@@ -149,7 +149,6 @@ exports.updateStudent = async (req, res) => {
       return res.status(409).json({ msg: "Student ID already exists." });
     }
 
-    console.log(req.body);
     const studentUpdated = await Student.findByIdAndUpdate(
       idToUpdate,
       {
@@ -167,12 +166,74 @@ exports.updateStudent = async (req, res) => {
       return res.status(404).json({ msg: "Student not found" });
     }
     logger.info({
-      message: `Student ${idToUpdate} info updated succesfully`,
+      message: `Student ${idToUpdate} info updated successfully`,
       filePath,
     });
     return res
       .status(200)
-      .json({ msg: "Student info was updated succesfully.", studentUpdated });
+      .json({ msg: "Student info was updated successfully.", studentUpdated });
+  } catch (error) {
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
+  }
+};
+
+exports.filterStudents = async (req, res) => {
+  try {
+    // Get filter criteria from body
+    const filterKeys = Object.keys(req.body);
+    const filterValues = Object.values(req.body);
+    let filterQuery = {};
+
+    // Create query with filter
+    for (let i = 0; i < filterKeys.length; i++) {
+      if (filterValues[i].length > 0) {
+        // if filter criteria is dateOfBirth
+        if (filterKeys[i] === "dateOfBirth") {
+          // check if it is between 2 dates
+          if (filterValues[i].length == 2) {
+            filterQuery[filterKeys[i]] = {
+              $gte: new Date(filterValues[i][0]),
+              $lt: new Date(filterValues[i][1]),
+            };
+          } else {
+            filterQuery[filterKeys[i]] = new Date(filterValues[i]);
+          }
+        } else {
+          filterQuery[filterKeys[i]] = {
+            // regex to get everything that contains the given expression
+            $regex: `${filterValues[i]}`,
+            $options: "i",
+          };
+        }
+      }
+    }
+
+    const filteredStudents = await Student.find(filterQuery);
+    if (!filteredStudents) {
+      logger.warn({
+        message: "Something went wrong",
+        filePath,
+        data: filteredStudents,
+      });
+      return res.status(404).json({ msg: "Could not apply filter 😭" });
+    }
+    logger.info({
+      message: `Filtered students were retrieved successfully.`,
+      filePath,
+    });
+
+    // Check if result is empty
+    if (filteredStudents.length == 0) {
+      return res
+        .status(204)
+        .json({ msg: "No results to show", filteredStudents });
+    }
+
+    return res.status(200).json({
+      msg: "Filtered students were retrieved successfully.",
+      filteredStudents,
+    });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });

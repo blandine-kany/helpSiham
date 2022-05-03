@@ -21,6 +21,7 @@ const filePath = path.relative(__dirname + "/..", __filename);
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
 const studentRoute = require("./routes/studentRoute");
+const courseRoute = require("./routes/courseRoute");
 
 // CORS Middleware
 let corsOptions = {
@@ -40,35 +41,28 @@ let sess = {
   resave: true,
   saveUninitialized: true,
 };
-
 app.use(session(sess));
 
 // parses application/json content and creates JS-accessible variables under (req.body)
 app.use(express.json());
 
-// parses requests of content-type - application/x-www-form-urlencoded
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
-
 // Routes
 app.use("/api/v1/auth/", authRoute);
 app.use("/api/v1/users/", userRoute);
 app.use("/api/v1/students/", studentRoute);
+app.use("/api/v1/courses/", courseRoute);
 
 // Listening on port
 app.listen(port, (error) => {
   if (error) {
     logger.error({
-      message: "Failed to start the server!",
+      message: "Failed to start the server! 😭😭",
       filePath,
       error,
     });
   } else {
     logger.info({
-      message: `Server is running on port ${port}`,
+      message: `Server is running on port ${port} 😎😎`,
       filePath,
     });
   }

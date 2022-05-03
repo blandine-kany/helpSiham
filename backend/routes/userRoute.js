@@ -9,7 +9,7 @@ const {
   userRegister,
   userLogin,
   userLogout,
-  userProfile,
+  getUser,
   updateUser,
   deleteUser,
 } = require("../controllers/userController");
@@ -19,15 +19,15 @@ const {
 // GET request to display all the users
 router.get("/", loginRequired, getAllUsers);
 
-//PATCH request to update user's profile
+// PATCH request to update user's profile
 router.patch("/profile", loginRequired, updateInput, updateUser);
 router.patch("/:userId", loginRequired, updateInput, updateUser);
 
-//GET request to access user's profile
-router.get("/profile", loginRequired, userProfile);
-router.get("/:userId", loginRequired, userProfile);
+// GET request to access user's profile
+router.get("/profile", loginRequired, getUser);
+router.get("/:userId", loginRequired, getUser);
 
-//DELETE request to delete a user account
+// DELETE request to delete a user account
 router.delete("/profile", loginRequired, deleteUser);
 router.delete("/:userId", loginRequired, deleteUser);
 

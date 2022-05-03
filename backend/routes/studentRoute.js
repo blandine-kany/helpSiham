@@ -8,28 +8,28 @@ const {
 const {
   getAllStudents,
   createStudent,
-  studentProfile,
+  getStudent,
   deleteStudent,
   updateStudent,
+  filterStudents,
 } = require("../controllers/studentController");
 /* API REST v1/students - Routes */
 
 // GET request to display all the students
-router.get("/", getAllStudents);
+router.get("/", loginRequired, getAllStudents);
 
 // POST request to create a student
-router.post("/", studentInput, createStudent);
+router.post("/", loginRequired, studentInput, createStudent);
 
 // GET request to access a student's profile
-router.get("/:studentId", studentProfile);
+router.get("/:studentId", loginRequired, getStudent);
 
 // DELETE request to delete a student
-router.delete("/:studentId", deleteStudent);
+router.delete("/:studentId", loginRequired, deleteStudent);
 
 // PUT request to update a student
-router.put("/:studentId", studentInput, updateStudent);
+router.put("/:studentId", loginRequired, studentInput, updateStudent);
 
-/*
 // POST request to filter students
 router.post("/filter", loginRequired, filterStudents);
 
