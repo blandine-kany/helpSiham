@@ -2,16 +2,14 @@
 
 A school management WEB application for registrating courses and students. 
 
-#
 
 ## Technical Stack - MEAN
-#
-### MongoDB
-### Express
-### AngularJS
-### NodeJS
 
-#
+MongoDB
+Express
+AngularJS
+NodeJS
+
 
 ## Usage
 
