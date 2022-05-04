@@ -14,7 +14,7 @@ const {
   deleteUser,
 } = require("../controllers/userController");
 
-/* API REST users/v1 - Routes */
+/* API REST  api/v1/users/ - Routes */
 
 // GET request to display all the users
 router.get("/", loginRequired, getAllUsers);

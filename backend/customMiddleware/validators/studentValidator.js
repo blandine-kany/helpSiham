@@ -27,7 +27,7 @@ exports.studentInput = [
     .trim()
     .escape()
     // Check if the string is in a array of allowed values.
-    .isIn(["representative", "normal"]),
+    .isIn(["classRepresentative", "normal"]),
   body("name.first").optional().trim().escape(),
 
   // Process user input - check if there are errors

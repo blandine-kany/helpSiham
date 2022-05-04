@@ -29,7 +29,7 @@ const studentSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["representative", "normal"],
+    enum: ["classRepresentative", "normal"],
     default: "normal",
   },
   studentId: {

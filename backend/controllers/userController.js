@@ -327,6 +327,36 @@ const updateUser = async (req, res) => {
   }
 };
 
+const userLogged = async (req, res) => {
+  try {
+    // gets user information
+    const user = await User.findById(req.session.userId);
+
+    // deletes unnecessary user information
+    user.password = undefined;
+    user.validAccount = undefined;
+    user.created_at = undefined;
+
+    req.session.userId = user._id;
+    logger.info({
+      message: `User ${user._id} information retrieved successfully`,
+      filePath,
+    });
+    return res
+      .status(200)
+      .json({ msg: "User information successfully retrieved", user });
+  } catch (error) {
+    logger.error({ message: " ", filePath, error });
+    return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
+  }
+};
+
+/**
+ * Checks if the role of a user is "superAdmin" or "admin"
+ *
+ * @param {*} req
+ * @returns - boolean
+ */
 async function checkRole(req) {
   const user = await User.findById(req.session.userId);
   if (user && user.role === ("superAdmin" || "admin")) {
@@ -344,4 +374,5 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  userLogged,
 };

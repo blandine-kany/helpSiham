@@ -5,7 +5,6 @@ const logger = require("../../config/logger");
 const path = require("path");
 const filePath = path.relative(__dirname + "/..", __filename);
 
-
 // Validation chain that checks basic user input
 const checkGenericInput = [
   body("name.last", "Lastname can not be empty!").notEmpty().trim().escape(),
@@ -51,8 +50,8 @@ exports.registrationInput = [
   // Process user input - check if there are errors
   async (req, res, next) => {
     const errors = validationResult(req);
-    const extractedErrors = [];
-    errors.array().map((err) => extractedErrors.push(err.msg));
+    const errorMessages = [];
+    errors.array().map((err) => errorMessages.push(err.msg));
 
     // if an error is detected notify user
     if (!errors.isEmpty()) {
@@ -77,9 +76,10 @@ exports.loginInput = [
   body("password").notEmpty().trim().escape(),
   async (req, res, next) => {
     const errors = validationResult(req);
-    const extractedErrors = [];
-    errors.array().map((err) => extractedErrors.push(err.msg));
-    
+    const errorMessages = [];
+
+    errors.array().map((err) => errorMessages.push(err.msg));
+
     if (!errors.isEmpty()) {
       logger.warn({
         message: "Invalid Student input",
@@ -102,10 +102,10 @@ exports.updateInput = [
   body("email", "Invalid email address").notEmpty().trim().escape().isEmail(),
   async (req, res, next) => {
     const errors = validationResult(req);
-    const extractedErrors = [];
+    const errorMessages = [];
     errors
       .array({ onlyFirstError: true })
-      .map((err) => extractedErrors.push(err.msg));
+      .map((err) => errorMessages.push(err.msg));
 
     if (!errors.isEmpty()) {
       logger.warn({
