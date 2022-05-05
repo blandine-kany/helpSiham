@@ -252,7 +252,7 @@ const deleteUser = async (req, res) => {
         filePath,
       });
       return res
-        .status(204)
+        .status(200)
         .json({ msg: "The account has been deleted successfully." });
     }
   });
