@@ -359,7 +359,7 @@ const userLogged = async (req, res) => {
  */
 async function checkRole(req) {
   const user = await User.findById(req.session.userId);
-  if (user && user.role === ("superAdmin" || "admin")) {
+  if (user && (user.role === "superAdmin" || user.role === "admin")) {
     return true;
   }
   return false;
