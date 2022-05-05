@@ -30,9 +30,14 @@ const checkGenericInput = [
     // if password contains an lowercase letter
     .matches("[a-z]")
     .withMessage("Password must contain a lowercase letter")
-    // if password contains an lowercase letter
+    // if password contains a special letter
     .matches("[^a-zA-Z0-9]")
     .withMessage("Password must contain a special character"),
+    body("position")
+    // Optional field
+    .optional()
+    .trim()
+    .escape(),
   body("confirmPassword", "Passwords do not match")
     .notEmpty()
     .trim()

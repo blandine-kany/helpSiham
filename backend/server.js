@@ -36,7 +36,7 @@ app.use(cors(corsOptions));
 let sess = {
   secret: process.env.SECRET_KEY,
   name: "uniqueSessionID",
-  cookie: { maxAge: 24 * 60 * 60 * 1000 },
+  cookie: { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 },
   httpOnly: true,
   resave: true,
   saveUninitialized: true,

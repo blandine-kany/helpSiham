@@ -19,7 +19,7 @@ exports.studentInput = [
   body("dateOfBirth", "Must be a valid date!")
     .trim()
     // Validate DOB to be a valid date
-    .isDate(),
+    .toDate("dd/mm/yyyy"),
   body("email", "Invalid email address").trim().escape().isEmail(),
   body("role", "Role must be a valid value")
     // Optional field
@@ -34,6 +34,7 @@ exports.studentInput = [
   async (req, res, next) => {
     const errors = validationResult(req);
     const errorMessages = [];
+    console.log(req.body.dateOfBirth);
     errors.array().map((err) => errorMessages.push(err.msg));
     // if an error is detected notify user
     if (!errors.isEmpty()) {

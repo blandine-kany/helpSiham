@@ -127,7 +127,7 @@ const userLogin = async (req, res) => {
         message: `User ${user._id} successfully connected`,
         filePath,
       });
-      return res.status(200).json({ name: user.name, email });
+      return res.status(200).json({ name: user.name, email, role: user.role });
     }
 
     logger.info({
