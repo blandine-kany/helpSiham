@@ -34,7 +34,6 @@ exports.studentInput = [
   async (req, res, next) => {
     const errors = validationResult(req);
     const errorMessages = [];
-    console.log(req.body.dateOfBirth);
     errors.array().map((err) => errorMessages.push(err.msg));
     // if an error is detected notify user
     if (!errors.isEmpty()) {
