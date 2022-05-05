@@ -91,7 +91,7 @@ exports.deleteStudent = async (req, res) => {
       message: `Student ${studentId} deleted`,
       filePath,
     });
-    return res.status(204).json({ msg: "Student was deleted successfully." });
+    return res.status(200).json({ msg: "Student was deleted successfully." });
   } catch (error) {
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
