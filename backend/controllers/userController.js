@@ -34,11 +34,16 @@ const getAllUsers = async (req, res) => {
       message: "List of users successfully retrieved.",
       filePath,
     });
+
+    // checks if result is empty
+    if (users.length == 0) {
+      return res.status(204);
+    }
+
     //else respond with a message and the list of users
     return res
       .status(200)
       .json({ msg: "Successfully retrieved all the users", users });
-      
   } catch (error) {
     // if an error is caught then respond with status code of 500
     logger.error({ message: " ", filePath, error });
