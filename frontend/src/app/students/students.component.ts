@@ -13,7 +13,7 @@ import { StudentsService } from '../students.service';
 })
 export class StudentsComponent implements OnInit {
 
-  displayedColumns: string[] = ['_id', 'name', 'email', 'major', 'role', 'studentId', 'dateOfBirth', 'dateOfInscription', 'ops'];
+  displayedColumns: string[] = ['name', 'email', 'major', 'role', 'studentId', 'dateOfBirth', 'dateOfInscription', 'ops'];
 
   students:any;
 

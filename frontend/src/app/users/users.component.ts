@@ -13,7 +13,7 @@ import { UsersService } from '../users.service';
 })
 export class UsersComponent implements OnInit {
 
-  displayedColumns: string[] = ['_id', 'name', 'email', 'position', 'role', 'created_at', 'ops'];
+  displayedColumns: string[] = ['name', 'email', 'position', 'role', 'created_at', 'ops'];
 
   users: any;
 
