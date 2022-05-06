@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { Student } from '../models/student';
 import { StudentsService } from '../students.service';
 
@@ -18,7 +19,7 @@ export class StudentsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
-  constructor(private router:Router, public studentsService:StudentsService) { }
+  constructor(private router:Router, public studentsService:StudentsService, public loginService:LoginService) { }
 
   ngOnInit(): void {
     this.getStudents();

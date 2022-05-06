@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { StudentsService } from '../students.service';
 
 @Component({
@@ -11,8 +12,9 @@ export class StudentAddComponent implements OnInit {
 
   STUDENT_TYPE = {name: {last:"", first:""},email:"",major:"", studentId:"", role:"", dateOfBirth:"", dateOfInscription:""}
   student:any;
+  error="";
 
-  constructor(private route:ActivatedRoute, private router:Router, public studentsService:StudentsService) { }
+  constructor(private route:ActivatedRoute, private router:Router, public studentsService:StudentsService, public loginService:LoginService) { }
 
   ngOnInit(): void {
     this.student = this.STUDENT_TYPE;
@@ -25,7 +27,7 @@ export class StudentAddComponent implements OnInit {
         this.router.navigate(["/students"]);
       },
       (error: any)=>{
-        console.log("Error")
+        this.error = "All inputs are required, please verify your entries."
       }
     );
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { User } from '../models/user';
 import { UsersService } from '../users.service';
 
@@ -15,8 +16,9 @@ export class UserRegisterComponent implements OnInit {
 
   USER_TYPE = {name: {last:"", first:""},email:"",position:"", password:"", confirmPassword:""}
   user:any;
+  error="";
 
-  constructor(private route:ActivatedRoute, private router:Router, public usersService:UsersService) { }
+  constructor(private route:ActivatedRoute, private router:Router, public usersService:UsersService, public loginService:LoginService) { }
 
   ngOnInit(): void {
     this.user = this.USER_TYPE;
@@ -29,7 +31,7 @@ export class UserRegisterComponent implements OnInit {
           this.router.navigate(["/login"]);
         },
         (error: any)=>{
-          console.log("Error")
+          this.error = "All inputs are required, please verify your entries.";
         }
       );
   }

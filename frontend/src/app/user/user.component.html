@@ -1,4 +1,4 @@
-<mat-card class="logincard">
+<mat-card class="logincard" *ngIf="loginService.connectedUser">
     <mat-card-header class="center">
         <mat-card-title>User</mat-card-title>
     </mat-card-header>
@@ -32,9 +32,10 @@
             </mat-select>
           </mat-form-field>
           <br>
+          <p style="color:red;">{{error}}</p><br>
           <mat-slide-toggle type="checkbox" [(ngModel)]="user.validAccount">Account validation</mat-slide-toggle>
           <br>
         <br>
-        <button (click)="saveUser()" mat-raised-button color="accent">Save</button>
+        <button (click)="saveUser()" mat-raised-button color="accent">Save <mat-icon>save</mat-icon></button>
     </mat-card-content>
 </mat-card>

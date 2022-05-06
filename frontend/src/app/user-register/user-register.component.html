@@ -1,4 +1,4 @@
-<mat-card class="logincard">
+<mat-card class="logincard" *ngIf="loginService.connectedUser">
     <mat-card-header class="center">
         <mat-card-title>User</mat-card-title>
     </mat-card-header>
@@ -33,7 +33,8 @@
             <input matInput type="text" [(ngModel)]="user.position">
           </mat-form-field>
           <br>
+          <p style="color:red;">{{error}}</p>
         <br>
-        <button (click)="saveUser()" mat-raised-button color="accent">Register</button>
+        <button (click)="saveUser()" mat-raised-button color="accent">Register <mat-icon>how_to_reg</mat-icon></button>
     </mat-card-content>
 </mat-card>

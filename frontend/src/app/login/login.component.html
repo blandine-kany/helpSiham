@@ -1,4 +1,4 @@
-<mat-card class="logincard">
+<mat-card *ngIf="!loginService.connectedUser" class="logincard" >
     <mat-card-header class="center">
         <mat-card-title>Authentification</mat-card-title>
     </mat-card-header>
@@ -17,6 +17,7 @@
             </button>
         </mat-form-field>
         <br>
+        <p style="color:red;">{{error}}</p><br>
         <button (click)="login()" mat-raised-button color="accent">Login</button><br>
         <button routerLink="/register" mat-raised-button color="accent">Register</button>
     </mat-card-content>

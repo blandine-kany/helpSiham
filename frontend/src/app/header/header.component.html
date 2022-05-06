@@ -1,9 +1,9 @@
 <mat-toolbar color='primary'>
     <span>Help Sihem</span>
-    <button *ngIf="loginService.connectedUser" routerLink="/" routerLinkActive="active-link" mat-button>Home</button>
-    <button *ngIf="loginService.connectedUser && loginService.connectedUser.role!='user'" routerLink="/users" routerLinkActive="active-link" mat-button>Users</button>
-    <button *ngIf="loginService.connectedUser" routerLink="/students" routerLinkActive="active-link" mat-button>Students</button>
+    <button *ngIf="loginService.connectedUser" routerLink="/" routerLinkActive="active-link" mat-button><mat-icon>home</mat-icon></button>
+    <button *ngIf="loginService.connectedUser && loginService.connectedUser.role!='user'" routerLink="/users" routerLinkActive="active-link" mat-button>Users <mat-icon>supervisor_account</mat-icon></button>
+    <button *ngIf="loginService.connectedUser" routerLink="/students" routerLinkActive="active-link" mat-button>Students <mat-icon>school</mat-icon></button>
     <span class="example-spacer"></span>
     <span *ngIf="loginService.connectedUser" style="margin-right: 30px;">{{loginService.connectedUser.name.last + " " + loginService.connectedUser.name.first}}</span>
-    <button *ngIf="loginService.connectedUser" (click)="logout()" mat-raised-button color="accent">Logout</button>
+    <button *ngIf="loginService.connectedUser" (click)="logout()" mat-raised-button color="accent">Logout <mat-icon>exit_to_app</mat-icon></button>
 </mat-toolbar>

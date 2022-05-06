@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { User } from '../models/user';
 import { UsersService } from '../users.service';
 
@@ -15,8 +16,10 @@ export class UserComponent implements OnInit {
 
  id:String;
   user:User;
+  
+  error = "";
 
-  constructor(private route:ActivatedRoute, private router:Router, public usersService:UsersService) { }
+  constructor(private route:ActivatedRoute, private router:Router, public usersService:UsersService, public loginService:LoginService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -31,7 +34,7 @@ export class UserComponent implements OnInit {
           this.router.navigate(["/users"]);
         },
         (error: any)=>{
-          console.log("Error")
+          this.error = "Lastname can not be empty!"
         }
       );
   }

@@ -1,5 +1,6 @@
 import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { Student } from '../models/student';
 import { StudentsService } from '../students.service';
 
@@ -12,8 +13,9 @@ export class StudentComponent implements OnInit {
 
   id:String;
   student:Student;
+  error="";
 
-  constructor(private route:ActivatedRoute, private router:Router, public studentsService:StudentsService) { }
+  constructor(private route:ActivatedRoute, private router:Router, public studentsService:StudentsService, public loginService:LoginService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -27,7 +29,7 @@ export class StudentComponent implements OnInit {
         this.router.navigate(["/students"]);
       },
       (error: any)=>{
-        console.log("Error")
+        this.error = "All inputs are required, please verify your entries."
       }
     );
 }

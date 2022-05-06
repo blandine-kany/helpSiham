@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: gray;}
+html
+{
+ margin:0px;
+ height:100%;
+ width:100%;
+ background:url('/../assets/background.jpg') no-repeat center center fixed; 
+ -webkit-background-size:cover;
+ -o-background-size:cover;
+ -moz-background-size:cover;
+ background-size:cover;
+}

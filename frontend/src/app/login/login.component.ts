@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   password = "";
   hide = true;
+  error = "";
 
   constructor(private route:ActivatedRoute, private router:Router, public loginService:LoginService) { }
 
@@ -23,12 +24,12 @@ export class LoginComponent implements OnInit {
     var indata = {'email': this.email.value, 'password': this.password };
     this.loginService.login(indata).subscribe(
       (data:any)=>{
-        console.log(data.data);
         this.loginService.isLogged();
         this.router.navigate(["/home"]);
+        this.error = data.msg;
       },
       (error: any)=>{
-        console.log("error")
+        this.error = "Email or password incorrect."
       }
     );
   }

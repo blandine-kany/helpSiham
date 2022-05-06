@@ -1,6 +1,6 @@
-<mat-card class="logincard">
+<mat-card class="logincard" *ngIf="loginService.connectedUser">
     <mat-card-header class="center">
-        <mat-card-title>User</mat-card-title>
+        <mat-card-title>Student</mat-card-title>
     </mat-card-header>
     <mat-card-content class="center">
         <mat-form-field appearance="fill">
@@ -30,7 +30,10 @@
           <br>
           <mat-form-field appearance="fill">
             <mat-label>Role</mat-label>
-            <input matInput type="text" [(ngModel)]="student.role">
+            <mat-select [(ngModel)]="student.role">
+              <mat-option value="classRepresentative">Class Representative</mat-option>
+              <mat-option value="normal">Normal</mat-option>
+            </mat-select>
           </mat-form-field>
           <br>
           <mat-form-field appearance="fill">
@@ -49,6 +52,7 @@
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
         <br>
-        <button (click)="saveStudent()" mat-raised-button color="accent">Save</button>
+        <p style="color:red;">{{error}}</p><br>
+        <button (click)="saveStudent()" mat-raised-button color="accent">Save <mat-icon>save</mat-icon></button>
     </mat-card-content>
 </mat-card>
