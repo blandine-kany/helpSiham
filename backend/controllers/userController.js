@@ -6,33 +6,46 @@ const filePath = path.relative(__dirname + "/..", __filename);
 
 const getAllUsers = async (req, res) => {
   try {
+    // checks if the role of the user is "superAdmin" or "admin"
     isRoleValid = await checkRole(req);
-    if (isRoleValid) {
-      const users = await User.find();
-      if (!users) {
-        logger.warn({
-          message: `There was an error`,
-          filePath,
-        });
-        return res.status(400).json({ msg: "There was an error" });
-      }
 
-      logger.info({
-        message: "List of users successfully retrieved.",
-        filePath,
-      });
-
-      return res
-        .status(200)
-        .json({ msg: "Successfully retrieved all the users", users });
-    } else {
+    // if user's role not "superAdmin" or "admin"
+    if (!isRoleValid) {
       logger.warn({
         message: `User ${req.session.userId} not authorized`,
         filePath,
       });
       return res.status(403).json({ msg: "You are not authorized." });
     }
+
+    // if user's role "superAdmin" or "admin"
+    const users = await User.find();
+
+    // if users undefined or null then respond with an error message
+    if (!users) {
+      logger.warn({
+        message: `There was an error`,
+        filePath,
+      });
+      return res.status(400).json({ msg: "There was an error" });
+    }
+
+    logger.info({
+      message: "List of users successfully retrieved.",
+      filePath,
+    });
+
+    // checks if result is empty
+    if (users.length == 0) {
+      return res.status(204);
+    }
+
+    //else respond with a message and the list of users
+    return res
+      .status(200)
+      .json({ msg: "Successfully retrieved all the users", users });
   } catch (error) {
+    // if an error is caught then respond with status code of 500
     logger.error({ message: " ", filePath, error });
     return res.status(500).json({ msg: "AAAAAAAAAH THERE WAS AN ERROR 😭😭" });
   }
@@ -119,7 +132,7 @@ const userLogin = async (req, res) => {
           message: "User not authorized yet",
           filePath,
         });
-        return res.status(401).json({ msg: "User not authorized yet." });
+        return res.status(403).json({ msg: "User not authorized yet." });
       }
 
       req.session.userId = user._id;

@@ -16,7 +16,7 @@ const {
   filterCourses,
 } = require("../controllers/courseController");
 
-/* API REST api/v1/courses/ - Routes */
+/* API REST api/v1/courses - Routes */
 
 // GET request to display all the courses
 router.get("/", loginRequired, getAllCourses);

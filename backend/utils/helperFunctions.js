@@ -48,6 +48,9 @@ async function comparePassword(password, hash) {
   return false;
 }
 
+/**
+ * 
+ */
 async function loginRequired(req, res, next) {
   if (!req.session || !req.session.userId) {
     logger.warn({
