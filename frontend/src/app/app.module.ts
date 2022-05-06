@@ -14,13 +14,33 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
+import { UsersComponent } from './users/users.component';
+import { UserComponent } from './user/user.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { UserRegisterComponent } from './user-register/user-register.component';
+import { StudentAddComponent } from './student-add/student-add.component';
+import { StudentComponent } from './student/student.component';
+import { StudentsComponent } from './students/students.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    UsersComponent,
+    UserComponent,
+    UserRegisterComponent,
+    StudentAddComponent,
+    StudentComponent,
+    StudentsComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +53,14 @@ import {MatIconModule} from '@angular/material/icon';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,54 @@
+<mat-card class="logincard">
+    <mat-card-header class="center">
+        <mat-card-title>User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="center">
+        <mat-form-field appearance="fill">
+            <mat-label>Last name</mat-label>
+            <input matInput type="text" [(ngModel)]="student.name.last">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>First name</mat-label>
+            <input matInput type="text" [(ngModel)]="student.name.first">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput type="text" [(ngModel)]="student.email">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Major</mat-label>
+            <input matInput type="text" [(ngModel)]="student.major">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Student Id</mat-label>
+            <input matInput type="text" [(ngModel)]="student.studentId">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Role</mat-label>
+            <input matInput type="text" [(ngModel)]="student.role">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Birth date</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="student.dateOfBirth">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Inscription date</mat-label>
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="student.dateOfInscription">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        <br>
+        <button (click)="saveStudent()" mat-raised-button color="accent">Save</button>
+    </mat-card-content>
+</mat-card>

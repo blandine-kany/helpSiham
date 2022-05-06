@@ -1,0 +1,40 @@
+<mat-card class="logincard">
+    <mat-card-header class="center">
+        <mat-card-title>User</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="center">
+        <mat-form-field appearance="fill">
+            <mat-label>Last name</mat-label>
+            <input matInput type="text" [(ngModel)]="user.name.last">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>First name</mat-label>
+            <input matInput type="text" [(ngModel)]="user.name.first">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput [disabled]="true" type="text" [(ngModel)]="user.email">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Position</mat-label>
+            <input matInput type="text" [(ngModel)]="user.position">
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Role</mat-label>
+            <mat-select [(ngModel)]="user.role">
+              <mat-option value="superAdmin">superAdmin</mat-option>
+              <mat-option value="admin">admin</mat-option>
+              <mat-option value="user">user</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-slide-toggle type="checkbox" [(ngModel)]="user.validAccount">Account validation</mat-slide-toggle>
+          <br>
+        <br>
+        <button (click)="saveUser()" mat-raised-button color="accent">Save</button>
+    </mat-card-content>
+</mat-card>
