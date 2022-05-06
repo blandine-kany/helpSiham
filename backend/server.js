@@ -47,10 +47,10 @@ app.use(session(sess));
 app.use(express.json());
 
 // Routes
-app.use("/api/v1/auth/", authRoute);
-app.use("/api/v1/users/", userRoute);
-app.use("/api/v1/students/", studentRoute);
-app.use("/api/v1/courses/", courseRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/students", studentRoute);
+app.use("/api/v1/courses", courseRoute);
 
 // Listening on port
 app.listen(port, (error) => {

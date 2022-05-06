@@ -16,7 +16,7 @@ const {
   filterStudents,
 } = require("../controllers/studentController");
 
-/* API REST api/v1/students/ - Routes */
+/* API REST api/v1/students - Routes */
 
 // GET request to display all the students
 router.get("/", loginRequired, getAllStudents);
