@@ -1,5 +1,5 @@
 <mat-toolbar color='primary'>
-    <span>Help Sihem</span>
+    <span>HelpSiham</span>
     <button *ngIf="loginService.connectedUser" routerLink="/" routerLinkActive="active-link" mat-button><mat-icon>home</mat-icon></button>
     <button *ngIf="loginService.connectedUser && loginService.connectedUser.role!='user'" routerLink="/users" routerLinkActive="active-link" mat-button>Users <mat-icon>supervisor_account</mat-icon></button>
     <button *ngIf="loginService.connectedUser" routerLink="/students" routerLinkActive="active-link" mat-button>Students <mat-icon>school</mat-icon></button>
